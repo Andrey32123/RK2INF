@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class BankAccount {
+private:
+    string accNum;
+    string owner;
+    double bal;
+
+public:
+    BankAccount(const string& num, const string& name, double balance)
+        : accNum(num), owner(name), bal(balance) {}
+
+    void deposit(double amt) {
+        bal += amt;
+    }
+
+    void withdraw(double amt) {
+        if (amt <= bal) {
+            bal -= amt;
+        } else {
+            cout << "Недостаточно средств." << endl;
+        }
+    }
+
+    double getBalance() const {
+        return bal;
+    }
+};
+
+class SavingsAccount : public BankAccount {
+private:
+    double rate;
+
+public:
+    SavingsAccount(const string& num, const string& name, double balance, double r)
+        : BankAccount(num, name, balance), rate(r) {}
+
+    void addInterest() {
+        double interest = getBalance() * rate / 100;
+        deposit(interest);
+    }
+};
+
+int main() {
+    BankAccount acc("12345", "Andrey", 1000);
+    acc.deposit(500);
+    acc.withdraw(200);
+    cout << "Баланс счета: " << acc.getBalance() << std::endl;
+
+    SavingsAccount savAcc("54321", "Vlad", 2000, 5);
+    savAcc.addInterest();
+    cout << "Баланс сбережений: " << savAcc.getBalance() << endl;
+
+    return 0;
+}
